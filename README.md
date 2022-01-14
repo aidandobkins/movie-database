@@ -1,4 +1,4 @@
-# movie-database
+# Movie Database Search
 
 This is a movie database project done for Internet Software Development.
 
