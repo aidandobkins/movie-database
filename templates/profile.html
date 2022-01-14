@@ -1,0 +1,23 @@
+{% extends "bootstrap/base.html" %}
+
+{% block content %}
+<h2>Profile Page</h2>
+<div>
+    <p>Your account details are below:</p>
+    <table>
+        <tr>
+            <td>Username:</td>
+            <td>{{ user[0] }}</td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>{{ user[1] }}</td>
+        </tr>
+    </table>
+</div>
+<div class="suggestions">
+    <h1>Recommendations</h1>
+
+    {{ recommend }}
+</div>
+{% endblock %}

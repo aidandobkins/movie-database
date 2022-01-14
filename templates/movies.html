@@ -1,0 +1,160 @@
+<!-- Jinja Template derived from Bootstrap base template -->
+{% extends "bootstrap/base.html" %}
+<!-- Tooltip Title -->
+{% block title %}Movies{% endblock %}
+{% block head %}
+    {{ JSGlue.include() }}
+    <!-- Preserve yhe style of the base template -->
+    {{ super() }}
+    <!-- Include Bootstrap CSS Stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- In page styling - Background Image, Bootstrap Elements and Pagination elements -->
+    <style>
+        body {
+            background-image: url("https://i2.wp.com/solvedquestion.com/wp-content/uploads/2021/03/hollywood-movies-2021.jpg?resize=872%2C593&ssl=1");
+        }
+
+        .card-body{
+            visibility: hidden;
+        }
+
+        .pagination
+        {
+            background-color: white;
+            font-size: 15px;
+        }
+        .pagination > li > a
+        {
+            background-color: white;
+            color: #5A4181;
+            font-size: 15px;
+        }
+
+        .pagination > li > a:focus,
+        .pagination > li > a:hover,
+        .pagination > li > span:focus,
+        .pagination > li > span:hover
+        {
+            color: #5a5a5a;
+            background-color: #eee;
+            border-color: #ddd;
+        }
+
+        .pagination > .active > a
+        {
+            color: white;
+            background-color: #5A4181 !Important;
+            border: solid 1px #5A4181 !Important;
+        }
+
+        .pagination > .active > a:hover
+        {
+            background-color: #5A4181 !Important;
+            border: solid 1px #5A4181;
+        }
+
+    </style>
+
+{% endblock %}
+<!-- Navigation bar -->
+{% block navbar %}
+<div class="navbar navbar-expand-sm bg-dark navbar-dark" role="navigation">
+    <div class="container">
+        <div class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                <!-- Inline styling of Home navigation (Home link resets the page to default) -->
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('movies') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('history') }}">History</a></li>
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('profile') }}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </div>
+        <!-- Include filters and search field in a form and link the form to the movies function -->
+        <form action="{{ url_for('movies') }}" method="POST">
+            <!-- Bootstrap Input group class -->
+            <div class="input-group mb-3 input-group-sm">
+                <!-- Sort Filter implemented using Select element -->
+               <span class="input-group-text" style="background-color: brown; color: #eeeeee">Sort By</span>
+                    <select name="sort">
+                        <option value="latest">Latest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="names">By name</option>
+                    </select> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <!-- Page Layout options implemented using Select element -->
+               <span class="input-group-text" style="background-color: yellow; color: black">Page Layout</span>
+                    <select name="page_layout">
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <!-- Search Filed implemented using a form input element -->
+               <span class="input-group-text">Search</span>
+              <input type="text" name="search" class="form-control">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <!-- Bootstrap Button to POST form data -->
+              <button class="btn btn-info" type="submit">Apply filters</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Preserve scripts of base template -->
+    {{ super() }}
+    <!-- Include Bootstrap and jQuery scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <script type="text/javascript">
+        function sendData(mov)
+        {
+            $.ajax({
+                type: 'POST',
+                url: '/passval',
+                data: {'title': mov}
+            });
+        }                       
+    </script>
+    <!-- Inline styling of page heading -->
+    <h1 style="text-align: center; background-color: floralwhite;color: maroon; font-size: 30px"> Movies Database!!!</h1>
+
+    <!-- Presentation Logic -->
+    <div class="container">
+        <div class="top-pad">
+            <!-- Loop through the movies dictionary -->
+            {% for mov in movies %}
+                <!-- Display each movie in a Bootstrap Card -->
+                <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <!-- Display only the title and display other information when a user moves the mouse over the title. -->
+                    <!-- Implemented with Document Object Model, Javascript and jQuery -->
+                    <!-- Identify the card body using the movie title as the ID -->
+                    <!-- replace() removes the single quote ' in each movie title -->
+                    <!-- When a user moves a mouse over a movie heading display the card body using Bootstrap Collapse class and
+                     display the other movie information by setting the css visibility attribute to visible -->
+                    <!-- When the moves leaves a movie heading hide the other movie information and the card body element -->
+                    <h2 onclick="sendData('{{ mov['title'] }}')" 
+                    onmouseenter="document.getElementById('{{ mov['title'] | replace("'"," ") }}').style.visibility='visible';
+                    document.getElementById('{{ mov['title'] | replace("'"," ") }}').className='collapse show'"
+                    onmouseleave="document.getElementById('{{ mov['title'] | replace('\'', ' ') }}').style.visibility='hidden';
+                    document.getElementById('{{ mov['title'] | replace('\'', ' ')}}').className='collapse'" id="movie_title">
+                        {{mov['title'] | replace("'"," ") }}
+                    </h2>
+                </div>
+                <!-- Assign the movie title as the ID of card body -->
+                <div id="{{ mov['title'] | replace("'"," ") }}" class="card-body collapse">
+                    <!-- Inline styling of the other movie information -->
+                    <p style="color: greenyellow; font-size: 15px; padding-left: 20px;">&nbsp;Year: {{ mov['year'] }}; Genres: {{ mov['genres'] }}; Cast: {{ mov['cast'] }}</p>
+                </div>
+                </div>
+                <br>
+            {% endfor %}
+        <!-- Display pagination links -->
+        <span class="badge bg-danger">{{ pagination.links }}</span>
+        </div>
+        </div>
+
+{% endblock %}

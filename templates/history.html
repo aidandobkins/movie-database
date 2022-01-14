@@ -1,0 +1,86 @@
+<!-- Jinja Template derived from Bootstrap base template -->
+{% extends "bootstrap/base.html" %}
+<!-- Tooltip Title -->
+{% block title %}Movies{% endblock %}
+{% block head %}
+    <!-- Preserve yhe style of the base template -->
+    {{ super() }}
+    <!-- Include Bootstrap CSS Stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- In page styling - Background Image, Bootstrap Elements and Pagination elements -->
+    <style>
+        body {
+            background-color: #1B3E68;
+        }
+        th, td{
+            font-size: 25px;
+        }
+    </style>
+
+{% endblock %}
+<!-- Navigation bar -->
+{% block navbar %}
+<div class="navbar navbar-expand-sm bg-dark navbar-dark" role="navigation">
+    <div class="container">
+        <div class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                <!-- Inline styling of Home navigation (Home link resets the page to default) -->
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('movies') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('history') }}">History</a></li>
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('profile') }}">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" style="font-size: 2em" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Preserve scripts of base template -->
+    {{ super() }}
+    <!-- Include Bootstrap and jQuery scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <!-- Inline styling of page heading -->
+    <h1 style="text-align: center; background-color: floralwhite;color: maroon; font-size: 30px"> User Statistics!!!</h1>
+
+    <!-- Presentation Logic -->
+    <div class="container mt-3">
+      <table class="table table-dark table-hover">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Total Searches</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ ulist[0] }}</td>
+            <td>{{ ulist[1] }}</td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="container mt-3">
+      <table class="table table-dark table-hover">
+        <thead>
+          <tr>
+            <th>Search</th>
+            <th>Genres</th>
+          </tr>
+        </thead>
+        <tbody>
+          <col>
+            {{ search | safe }}
+          </col>
+        </tbody>
+      </table>
+    </div>
+
+{% endblock %}
